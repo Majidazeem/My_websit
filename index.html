@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEGEND MODS - VIP ACCESS</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CORE STYLES --- */
+        :root {
+            --primary: #00ff41; /* Hacker Green */
+            --bg: #000000;
+            --card: #111;
+            --text: #fff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden; /* Hide scrollbars during intro */
+        }
+
+        /* --- INTRO OVERLAY (WELCOME SCREEN) --- */
+        #introLayer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .glitch-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: bold;
+            text-shadow: 2px 2px 0px #ff003c, -2px -2px 0px #00d9ff;
+            animation: glitch 1s infinite alternate;
+            margin-bottom: 20px;
+        }
+
+        .status-msg {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        .loading-bar {
+            width: 80%;
+            max-width: 300px;
+            height: 5px;
+            background: #222;
+            margin-top: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .loading-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            transition: width 0.1s;
+        }
+
+        /* --- MAIN WEBSITE (Hidden initially) --- */
+        #mainContent {
+            opacity: 0;
+            transition: opacity 1s ease;
+            display: none; /* Load hone ke baad dikhega */
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.8)), 
+                url('https://i.pinimg.com/originals/1c/13/f3/1c13f3fe7a6bba370391a56163b8602b.gif');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* Header */
+        header { padding: 40px 20px; text-align: center; }
+        .logo { font-family: 'Orbitron', sans-serif; font-size: 3rem; color: white; animation: pulse 2s infinite; }
+        .logo span { color: var(--primary); }
+
+        /* Search */
+        .search-box { margin: 20px auto; max-width: 90%; width: 400px; }
+        input { 
+            width: 100%; padding: 15px; border: 1px solid var(--primary); 
+            background: rgba(0,0,0,0.8); color: white; text-align: center; 
+            font-family: 'Orbitron', sans-serif; outline: none;
+        }
+
+        /* Tools Grid */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background: rgba(20,20,20,0.9);
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+        }
+
+        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .card h3 { font-family: 'Orbitron', sans-serif; margin-bottom: 10px; color: white; }
+        .card p { color: #aaa; font-size: 0.9rem; margin-bottom: 15px; }
+        
+        .btn {
+            display: inline-block; padding: 10px 25px; 
+            border: 1px solid var(--primary); color: var(--primary);
+            text-decoration: none; font-weight: bold; cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover { background: var(--primary); color: black; }
+
+        /* Footer */
+        footer { text-align: center; margin-top: 40px; color: #555; font-size: 0.8rem; }
+        footer b { color: var(--primary); }
+
+        /* Animations */
+        @keyframes glitch { 0% { opacity: 1; transform: translate(0); } 20% { opacity: 0.8; transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { opacity: 1; transform: translate(0); } }
+        @keyframes pulse { 0% { text-shadow: 0 0 10px var(--primary); } 50% { text-shadow: 0 0 30px var(--primary); } 100% { text-shadow: 0 0 10px var(--primary); } }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. INTRO SCREEN (WELCOME ANIMATION) -->
+    <div id="introLayer">
+        <div class="glitch-text" id="introTitle">SYSTEM BOOT</div>
+        <div class="status-msg" id="introStatus">INITIALIZING...</div>
+        <div class="loading-bar">
+            <div class="loading-fill" id="introProgress"></div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN WEBSITE CONTENT -->
+    <div id="mainContent">
+        <header>
+            <div class="logo">LEGEND <span>MODS</span></div>
+            <p style="color:#aaa; margin-top:5px; letter-spacing:2px;">VIP TOOLKIT DATABASE</p>
+            
+            <div class="search-box">
+                <input type="text" id="search" placeholder="SEARCH TOOLS..." onkeyup="filterTools()">
+            </div>
+        </header>
+
+        <div class="container" id="toolGrid">
+            <!-- Tools JS se aayenge -->
+        </div>
+
+        <footer>
+            POWERED BY <b>MA LEGEND</b>
+        </footer>
+    </div>
+
+    <script>
+        // ============================
+        //  INTRO ANIMATION LOGIC
+        // ============================
+        window.onload = function() {
+            const title = document.getElementById('introTitle');
+            const status = document.getElementById('introStatus');
+            const bar = document.getElementById('introProgress');
+            const introLayer = document.getElementById('introLayer');
+            const mainContent = document.getElementById('mainContent');
+
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 2; // Loading speed
+                bar.style.width = width + '%';
+
+                // Texts changing at different percentages
+                if(width == 20) { status.innerText = "CONNECTING TO SERVER..."; }
+                if(width == 40) { title.innerText = "USER: LEGEND"; status.innerText = "VERIFYING ID..."; }
+                if(width == 70) { title.innerText = "ACCESS GRANTED"; status.innerText = "LOADING MODULES..."; title.style.color = "#00ff41"; }
+                if(width == 90) { title.innerText = "WELCOME"; status.innerText = "STARTING..."; }
+
+                if (width >= 100) {
+                    clearInterval(interval);
+                    // Fade out intro, Show Website
+                    introLayer.style.opacity = '0';
+                    setTimeout(() => {
+                        introLayer.style.display = 'none';
+                        mainContent.style.display = 'block';
+                        setTimeout(() => { mainContent.style.opacity = '1'; }, 100);
+                    }, 500);
+                }
+            }, 50); // Speed of loading (lower is faster)
+        };
+
+        // ============================
+        //  TOOLS DATABASE
+        // ============================
+        const tools = [
+            { name: "IP FINDER", desc: "Track Location & IP", icon: "fa-globe", link: "https://whatismyipaddress.com/" },
+            { name: "DEVICE INFO", desc: "Full Phone Specs Hack", icon: "fa-mobile-alt", link: "https://www.deviceinfo.me/" },
+            { name: "SPEED TEST", desc: "Check Net Speed", icon: "fa-tachometer-alt", link: "https://fast.com" },
+            { name: "PASSWORD GEN", desc: "Create Strong Pass", icon: "fa-key", link: "https://passwordsgenerator.net/" },
+            { name: "TEMP MAIL", desc: "Fake Email Gen", icon: "fa-envelope", link: "https://temp-mail.org/" },
+            { name: "QR MAKER", desc: "Text to Image", icon: "fa-qrcode", link: "https://www.the-qrcode-generator.com/" }
+        ];
+
+        // Render Tools
+        const grid = document.getElementById('toolGrid');
+        function render(filter = "") {
+            grid.innerHTML = "";
+            tools.forEach(t => {
+                if(t.name.toLowerCase().includes(filter.toLowerCase())) {
+                    const card = `
+                        <div class="card">
+                            <i class="fas ${t.icon}"></i>
+                            <h3>${t.name}</h3>
+                            <p>${t.desc}</p>
+                            <a href="${t.link}" target="_blank" class="btn">OPEN TOOL</a>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                }
+            });
+        }
+        
+        function filterTools() { render(document.getElementById('search').value); }
+        render(); // Initial load
+    </script>
+
+</body>
+</html>
