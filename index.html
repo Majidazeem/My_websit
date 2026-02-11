@@ -3,251 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEGEND MODS - VIP ACCESS</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>MA LEGEND | SUPREME HUB V3 PRO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        /* --- CORE STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Poppins:wght@300;400;600&display=swap');
+
         :root {
-            --primary: #00ff41; /* Hacker Green */
-            --bg: #000000;
-            --card: #111;
-            --text: #fff;
+            --bg: #e0e5ec;
+            --text: #44476a;
+            --red: #ff4d4d;
+            --shadow-out: 9px 9px 16px #bcbfc5, -9px -9px 16px #ffffff;
+            --shadow-in: inset 7px 7px 14px #cbcbe1, inset -7px -7px 14px #ffffff;
+            --glass: rgba(224, 229, 236, 0.8);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Share Tech Mono', monospace;
-            overflow-x: hidden; /* Hide scrollbars during intro */
+        body.dark-mode {
+            --bg: #1a1b1e;
+            --text: #c1c2c5;
+            --red: #ff4d4d;
+            --shadow-out: 8px 8px 16px #0d0d0e, -8px -8px 16px #27282e;
+            --shadow-in: inset 6px 6px 12px #0d0d0e, inset -6px -6px 12px #27282e;
         }
 
-        /* --- INTRO OVERLAY (WELCOME SCREEN) --- */
-        #introLayer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+        /* --- ANIMATIONS --- */
+        @keyframes load { from { width: 0%; } to { width: 100%; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+        /* --- SPLASH SCREEN --- */
+        #splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 9999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
-
-        .glitch-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            color: var(--primary);
-            font-weight: bold;
-            text-shadow: 2px 2px 0px #ff003c, -2px -2px 0px #00d9ff;
-            animation: glitch 1s infinite alternate;
-            margin-bottom: 20px;
+        .splash-frame {
+            width: 130px; height: 130px; border-radius: 40px; padding: 8px;
+            background: var(--bg); box-shadow: var(--shadow-out); border: 2px solid var(--red);
+            animation: float 3s ease-in-out infinite;
         }
+        .splash-frame img { width: 100%; height: 100%; border-radius: 30px; object-fit: cover; }
 
-        .status-msg {
-            font-size: 1.2rem;
-            color: #fff;
-            margin-top: 10px;
-            letter-spacing: 2px;
+        /* --- TOOL INTRO SCREEN --- */
+        #tool-intro {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 6000; display: none; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
         }
+        .loader-line { width: 200px; height: 6px; background: var(--bg); box-shadow: var(--shadow-in); border-radius: 10px; margin-top: 25px; overflow: hidden; }
+        .loader-fill { width: 0%; height: 100%; background: var(--red); border-radius: 10px; }
+        .active-load { animation: load 3s forwards; }
 
-        .loading-bar {
-            width: 80%;
-            max-width: 300px;
-            height: 5px;
-            background: #222;
-            margin-top: 20px;
-            border-radius: 5px;
-            overflow: hidden;
+        /* --- HEADER --- */
+        header {
+            width: 100%; background: var(--bg); padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
         }
+        .status-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 8px #00ff00; animation: blink 1.5s infinite; }
 
-        .loading-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--primary);
-            box-shadow: 0 0 15px var(--primary);
-            transition: width 0.1s;
-        }
+        /* --- CONTAINER --- */
+        .container { max-width: 500px; margin: 0 auto; padding: 20px 15px 120px; }
+        .section { display: none; animation: slideUp 0.6s ease; }
+        .section.active { display: block; }
 
-        /* --- MAIN WEBSITE (Hidden initially) --- */
-        #mainContent {
-            opacity: 0;
-            transition: opacity 1s ease;
-            display: none; /* Load hone ke baad dikhega */
-            background-image: 
-                linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.8)), 
-                url('https://i.pinimg.com/originals/1c/13/f3/1c13f3fe7a6bba370391a56163b8602b.gif');
-            background-size: cover;
-            background-attachment: fixed;
-            min-height: 100vh;
-            padding-bottom: 50px;
-        }
+        /* --- CARDS --- */
+        .card { background: var(--bg); border-radius: 35px; padding: 25px; box-shadow: var(--shadow-out); margin-bottom: 25px; }
 
-        /* Header */
-        header { padding: 40px 20px; text-align: center; }
-        .logo { font-family: 'Orbitron', sans-serif; font-size: 3rem; color: white; animation: pulse 2s infinite; }
-        .logo span { color: var(--primary); }
+        /* --- TOOL GRID --- */
+        .grid-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .tool-card { background: var(--bg); padding: 20px; border-radius: 25px; box-shadow: var(--shadow-out); text-align: center; cursor: pointer; }
+        .tool-card i { font-size: 1.6rem; color: var(--red); margin-bottom: 10px; display: block; }
+        .tool-card span { font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; color: var(--text); }
+        .tool-card:active { box-shadow: var(--shadow-in); transform: scale(0.95); }
 
-        /* Search */
-        .search-box { margin: 20px auto; max-width: 90%; width: 400px; }
-        input { 
-            width: 100%; padding: 15px; border: 1px solid var(--primary); 
-            background: rgba(0,0,0,0.8); color: white; text-align: center; 
-            font-family: 'Orbitron', sans-serif; outline: none;
-        }
+        /* --- SEARCH BOX --- */
+        .search-container { margin: 20px 0; position: relative; }
+        .search-box { width: 100%; padding: 15px 20px 15px 50px; border-radius: 20px; border: none; background: var(--bg); box-shadow: var(--shadow-in); color: var(--text); outline: none; font-family: 'Poppins'; }
+        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--red); }
 
-        /* Tools Grid */
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
+        /* --- VIP STATS --- */
+        .skill-row { margin-bottom: 15px; }
+        .skill-label { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: bold; font-family: 'Orbitron'; margin-bottom: 5px; }
+        .skill-bar { width: 100%; height: 8px; background: var(--bg); box-shadow: var(--shadow-in); border-radius: 10px; overflow: hidden; }
+        .skill-fill { height: 100%; background: var(--red); width: 0; transition: 1.5s cubic-bezier(0.1, 1, 0.1, 1); }
 
-        .card {
-            background: rgba(20,20,20,0.9);
-            border: 1px solid #333;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            transition: 0.3s;
-        }
+        /* --- CONTACT GRID --- */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .contact-tile { background: var(--bg); padding: 20px; border-radius: 25px; box-shadow: var(--shadow-out); text-align: center; text-decoration: none; display: block; }
+        .contact-tile i { font-size: 1.8rem; color: var(--red); margin-bottom: 10px; }
+        .contact-tile p { font-size: 0.7rem; font-weight: bold; font-family: 'Orbitron'; color: var(--text); }
 
-        .card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
-        }
+        /* --- POLICY ITEMS cc b--- */
+        .policy-item { padding: 15px; border-radius: 20px; box-shadow: var(--shadow-in); margin-bottom: 15px; font-size: 0.75rem; line-height: 1.5; }
+        .policy-item h4 { font-family: 'Orbitron'; color: var(--red); font-size: 0.7rem; margin-bottom: 5px; }
 
-        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
-        .card h3 { font-family: 'Orbitron', sans-serif; margin-bottom: 10px; color: white; }
-        .card p { color: #aaa; font-size: 0.9rem; margin-bottom: 15px; }
-        
-        .btn {
-            display: inline-block; padding: 10px 25px; 
-            border: 1px solid var(--primary); color: var(--primary);
-            text-decoration: none; font-weight: bold; cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn:hover { background: var(--primary); color: black; }
+        /* --- MODAL --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal { background: var(--bg); padding: 30px; border-radius: 30px; box-shadow: var(--shadow-out); text-align: center; max-width: 350px; width: 100%; }
 
-        /* Footer */
-        footer { text-align: center; margin-top: 40px; color: #555; font-size: 0.8rem; }
-        footer b { color: var(--primary); }
+        /* --- DOCK NAV --- */
+        .dock { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: var(--glass); backdrop-filter: blur(15px); padding: 10px; border-radius: 30px; box-shadow: var(--shadow-out); display: flex; justify-content: space-around; z-index: 2000; }
+        .dock i { font-size: 1.2rem; padding: 12px; cursor: pointer; color: #a1a1a1; }
+        .dock i.active { color: var(--red); transform: translateY(-8px); filter: drop-shadow(0 0 5px var(--red)); }
 
-        /* Animations */
-        @keyframes glitch { 0% { opacity: 1; transform: translate(0); } 20% { opacity: 0.8; transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { opacity: 1; transform: translate(0); } }
-        @keyframes pulse { 0% { text-shadow: 0 0 10px var(--primary); } 50% { text-shadow: 0 0 30px var(--primary); } 100% { text-shadow: 0 0 10px var(--primary); } }
+        /* --- SIDEBAR --- */
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--bg); z-index: 4001; padding: 30px 20px; transition: 0.4s; }
+        .sidebar.active { left: 0; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; }
+        .overlay.active { display: block; }
 
+        footer { text-align: center; font-size: 0.6rem; font-family: 'Orbitron'; opacity: 0.4; padding: 20px; }
     </style>
 </head>
 <body>
 
-    <!-- 1. INTRO SCREEN (WELCOME ANIMATION) -->
-    <div id="introLayer">
-        <div class="glitch-text" id="introTitle">SYSTEM BOOT</div>
-        <div class="status-msg" id="introStatus">INITIALIZING...</div>
-        <div class="loading-bar">
-            <div class="loading-fill" id="introProgress"></div>
+    <!-- Main Splash -->
+    <div id="splash">
+        <div class="splash-frame"><img src="https://i.postimg.cc/1V8dtc0y/20260129-160300.jpg"></div>
+        <h2 style="font-family:'Orbitron'; color:var(--red); margin-top:20px; letter-spacing:3px;">MA LEGEND</h2>
+        <div class="loader-line" style="width:140px;"><div class="loader-fill" style="animation: load 3s forwards;"></div></div>
+    </div>
+
+    <!-- Tool Intro Screen (3s) -->
+    <div id="tool-intro">
+        <i class="fas fa-bolt" style="font-size: 3.5rem; color: var(--red); animation: float 2s infinite;"></i>
+        <h2 id="intro-name" style="font-family:'Orbitron'; color:var(--text); margin-top:25px; font-size: 0.9rem;">LOADING...</h2>
+        <div class="loader-line"><div class="loader-fill" id="intro-fill"></div></div>
+    </div>
+
+    <header>
+        <i class="fas fa-bars" onclick="toggleSidebar()" style="color:var(--red); cursor:pointer;"></i>
+        <div style="font-family:'Orbitron'; font-size:0.7rem;">
+            <span class="status-dot"></span>SYSTEM ONLINE
+        </div>
+        <i class="fas fa-moon" onclick="toggleDarkMode()" style="color:var(--red); cursor:pointer;"></i>
+    </header>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div style="text-align:right;"><i class="fas fa-times" onclick="toggleSidebar()" style="color:var(--red);"></i></div>
+        <h2 style="font-family:'Orbitron'; font-size:1rem; color:var(--red); margin: 20px 0;">MA HUB MENU</h2>
+        <div class="card" onclick="showSection('home')" style="padding:15px; margin-bottom:10px; cursor:pointer;">DASHBOARD</div>
+        <div class="card" onclick="showSection('about')" style="padding:15px; margin-bottom:10px; cursor:pointer;">VIP PROFILE</div>
+    </div>
+
+    <div class="container">
+        
+        <!-- DASHBOARD (HOME) -->
+        <div id="home" class="section active">
+            <div class="card" style="text-align:center;">
+                <img src="https://i.postimg.cc/1V8dtc0y/20260129-160300.jpg" style="width:90px; height:90px; border-radius:50%; border:2px solid var(--red); padding:4px; box-shadow:var(--shadow-out);">
+                <h3 id="typing-text" style="font-family:'Orbitron'; font-size:0.85rem; margin-top:15px; color:var(--red); min-height:1.2rem;"></h3>
+                <p style="font-size:0.6rem; opacity:0.6; font-weight:bold;">SUPREME MASTER V25</p>
+            </div>
+
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="toolSearch" class="search-box" placeholder="Search Tools..." onkeyup="searchTools()">
+            </div>
+
+            <div class="grid-tools" id="toolsGrid">
+                <!-- Template example with link -->
+                <div class="tool-card" onclick="startTool('Msg Engine', 'Military grade message encryption.', 'https://google.com')"><i class="fas fa-paper-plane"></i><span>Msg Engine</span></div>
+                <div class="tool-card" onclick="startTool('Legend Gen', 'Supreme payload generator.', 'https://youtube.com')"><i class="fas fa-crown"></i><span>Legend Gen</span></div>
+                <div class="tool-card" onclick="startTool('Hacker Lab', 'Virtual exploit environment.', '#')"><i class="fas fa-terminal"></i><span>Hacker Lab</span></div>
+                <div class="tool-card" onclick="startTool('Spam Pro', 'Spam bot protection.', '#')"><i class="fas fa-bomb"></i><span>Spam Pro</span></div>
+            </div>
+        </div>
+
+        <!-- VIP PROFILE (ABOUT) -->
+        <div id="about" class="section">
+            <div class="card">
+                <h3 style="font-family:'Orbitron'; font-size:0.8rem; color:var(--red); margin-bottom:20px; text-align:center;">VIP MODDER STATS</h3>
+                <div class="skill-row">
+                    <div class="skill-label"><span>PYTHON</span><span>98%</span></div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="98%"></div></div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-label"><span>BYPASS</span><span>95%</span></div>
+                    <div class="skill-bar"><div class="skill-fill" data-width="95%"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div id="contact" class="section">
+            <div class="contact-grid">
+                <a href="https://t.me/LegendMode_banchack_whatsapp" class="contact-tile"><i class="fab fa-telegram-plane"></i><p>TELEGRAM</p></a>
+                <a href="https://whatsapp.com/channel/0029VarS46O3QxRtTZO0z60x" class="contact-tile"><i class="fab fa-whatsapp"></i><p>WHATSAPP</p></a>
+            </div>
+        </div>
+
+        <!-- POLICY -->
+        <div id="policy" class="section">
+            <div class="card">
+                <div class="policy-item"><h4>SAFETY</h4><p>Local encryption active. No data stored.</p></div>
+            </div>
+        </div>
+
+        <footer>© 2026 MA LEGEND | SUPREME HUB</footer>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <h3 id="modal-title" style="font-family:'Orbitron'; color:var(--red); margin-bottom:15px;"></h3>
+            <p id="modal-desc" style="font-size:0.8rem; margin-bottom:25px; line-height:1.6;"></p>
+            <button id="launch-btn" style="padding:12px 30px; border-radius:15px; border:none; background:var(--red); color:white; font-family:'Orbitron'; font-size:0.7rem; cursor:pointer;" onclick="launchNow()">LAUNCH SYSTEM</button>
         </div>
     </div>
 
-    <!-- 2. MAIN WEBSITE CONTENT -->
-    <div id="mainContent">
-        <header>
-            <div class="logo">LEGEND <span>MODS</span></div>
-            <p style="color:#aaa; margin-top:5px; letter-spacing:2px;">VIP TOOLKIT DATABASE</p>
-            
-            <div class="search-box">
-                <input type="text" id="search" placeholder="SEARCH TOOLS..." onkeyup="filterTools()">
-            </div>
-        </header>
-
-        <div class="container" id="toolGrid">
-            <!-- Tools JS se aayenge -->
-        </div>
-
-        <footer>
-            POWERED BY <b>MA LEGEND</b>
-        </footer>
+    <!-- DOCK -->
+    <div class="dock">
+        <i class="fas fa-th-large active" id="dock-home" onclick="showSection('home')"></i>
+        <i class="fas fa-user-shield" id="dock-about" onclick="showSection('about')"></i>
+        <i class="fas fa-paper-plane" id="dock-contact" onclick="showSection('contact')"></i>
+        <i class="fas fa-shield-alt" id="dock-policy" onclick="showSection('policy')"></i>
     </div>
 
     <script>
-        // ============================
-        //  INTRO ANIMATION LOGIC
-        // ============================
-        window.onload = function() {
-            const title = document.getElementById('introTitle');
-            const status = document.getElementById('introStatus');
-            const bar = document.getElementById('introProgress');
-            const introLayer = document.getElementById('introLayer');
-            const mainContent = document.getElementById('mainContent');
+        let currentToolLink = ""; // Link store karne ke liye
 
-            let width = 0;
-            const interval = setInterval(() => {
-                width += 2; // Loading speed
-                bar.style.width = width + '%';
-
-                // Texts changing at different percentages
-                if(width == 20) { status.innerText = "CONNECTING TO SERVER..."; }
-                if(width == 40) { title.innerText = "USER: LEGEND"; status.innerText = "VERIFYING ID..."; }
-                if(width == 70) { title.innerText = "ACCESS GRANTED"; status.innerText = "LOADING MODULES..."; title.style.color = "#00ff41"; }
-                if(width == 90) { title.innerText = "WELCOME"; status.innerText = "STARTING..."; }
-
-                if (width >= 100) {
-                    clearInterval(interval);
-                    // Fade out intro, Show Website
-                    introLayer.style.opacity = '0';
-                    setTimeout(() => {
-                        introLayer.style.display = 'none';
-                        mainContent.style.display = 'block';
-                        setTimeout(() => { mainContent.style.opacity = '1'; }, 100);
-                    }, 500);
-                }
-            }, 50); // Speed of loading (lower is faster)
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('splash').style.opacity = '0';
+                setTimeout(() => { document.getElementById('splash').style.display = 'none'; startTyping(); }, 500);
+            }, 3000);
         };
 
-        // ============================
-        //  TOOLS DATABASE
-        // ============================
-        const tools = [
-            { name: "IP FINDER", desc: "Track Location & IP", icon: "fa-globe", link: "https://whatismyipaddress.com/" },
-            { name: "DEVICE INFO", desc: "Full Phone Specs Hack", icon: "fa-mobile-alt", link: "https://www.deviceinfo.me/" },
-            { name: "SPEED TEST", desc: "Check Net Speed", icon: "fa-tachometer-alt", link: "https://fast.com" },
-            { name: "PASSWORD GEN", desc: "Create Strong Pass", icon: "fa-key", link: "https://passwordsgenerator.net/" },
-            { name: "TEMP MAIL", desc: "Fake Email Gen", icon: "fa-envelope", link: "https://temp-mail.org/" },
-            { name: "QR MAKER", desc: "Text to Image", icon: "fa-qrcode", link: "https://www.the-qrcode-generator.com/" }
-        ];
-
-        // Render Tools
-        const grid = document.getElementById('toolGrid');
-        function render(filter = "") {
-            grid.innerHTML = "";
-            tools.forEach(t => {
-                if(t.name.toLowerCase().includes(filter.toLowerCase())) {
-                    const card = `
-                        <div class="card">
-                            <i class="fas ${t.icon}"></i>
-                            <h3>${t.name}</h3>
-                            <p>${t.desc}</p>
-                            <a href="${t.link}" target="_blank" class="btn">OPEN TOOL</a>
-                        </div>
-                    `;
-                    grid.innerHTML += card;
-                }
-            });
+        function startTyping() {
+            const text = "WELCOME, TO LEGEND MODS"; let i = 0; const target = document.getElementById('typing-text');
+            function type() { if (i < text.length) { target.innerHTML += text.charAt(i); i++; setTimeout(type, 120); } } type();
         }
-        
-        function filterTools() { render(document.getElementById('search').value); }
-        render(); // Initial load
-    </script>
 
+        function startTool(title, desc, link) {
+            currentToolLink = link; // Link save karo
+            const intro = document.getElementById('tool-intro');
+            const fill = document.getElementById('intro-fill');
+            const name = document.getElementById('intro-name');
+
+            name.innerText = "INITIALIZING " + title.toUpperCase();
+            intro.style.display = 'flex';
+            fill.classList.add('active-load');
+
+            setTimeout(() => {
+                intro.style.display = 'none';
+                fill.classList.remove('active-load');
+                openModal(title, desc);
+            }, 3000);
+        }
+
+        function openModal(title, desc) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+
+        function launchNow() {
+            if(currentToolLink !== "#") {
+                window.location.href = currentToolLink; // Link khol do
+            } else {
+                alert("Link not available yet!");
+            }
+            closeModal();
+        }
+
+        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.dock i').forEach(i => i.classList.remove('active'));
+            document.getElementById('dock-' + id).classList.add('active');
+            if(id === 'about') {
+                setTimeout(() => { document.querySelectorAll('.skill-fill').forEach(f => f.style.width = f.getAttribute('data-width')); }, 300);
+            }
+            toggleSidebar(true); window.scrollTo(0, 0);
+        }
+
+        function toggleSidebar(forceClose) {
+            const side = document.getElementById('sidebar');
+            const over = document.getElementById('overlay');
+            if(forceClose) { side.classList.remove('active'); over.classList.remove('active'); }
+            else { side.classList.toggle('active'); over.classList.toggle('active'); }
+        }
+
+        function searchTools() {
+            let input = document.getElementById('toolSearch').value.toLowerCase();
+            let cards = document.getElementsByClassName('tool-card');
+            for (let i = 0; i < cards.length; i++) {
+                let title = cards[i].getElementsByTagName('span')[0].innerText.toLowerCase();
+                cards[i].style.display = title.includes(input) ? "block" : "none";
+            }
+        }
+
+        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
+    </script>
 </body>
 </html>
