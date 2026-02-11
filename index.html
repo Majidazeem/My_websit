@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MA LEGEND | SUPREME HUB V3 PRO</title>
+    <title>MA LEGEND | SUPREME HUB V4 PRO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Poppins:wght@300;400;600&display=swap');
@@ -14,7 +14,7 @@
             --red: #ff4d4d;
             --shadow-out: 9px 9px 16px #bcbfc5, -9px -9px 16px #ffffff;
             --shadow-in: inset 7px 7px 14px #cbcbe1, inset -7px -7px 14px #ffffff;
-            --glass: rgba(224, 229, 236, 0.8);
+            --glass: rgba(224, 229, 236, 0.85);
         }
 
         body.dark-mode {
@@ -27,9 +27,15 @@
 
         /* --- ANIMATIONS --- */
         @keyframes load { from { width: 0%; } to { width: 100%; } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-180%); } }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.5; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* NEW: Gentle Logo Floating Animation (Holi Holi Hilne Wala) */
+        @keyframes logoHiley {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
 
         * { margin: 0; padding: 0; box-sizing: border-box; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
@@ -40,22 +46,13 @@
             background: var(--bg); z-index: 9999; display: flex; flex-direction: column;
             align-items: center; justify-content: center;
         }
-        .splash-frame {
-            width: 130px; height: 130px; border-radius: 40px; padding: 8px;
-            background: var(--bg); box-shadow: var(--shadow-out); border: 2px solid var(--red);
-            animation: float 3s ease-in-out infinite;
+        .splash-logo { 
+            width: 120px; border-radius: 35px; border: 3px solid var(--red); 
+            box-shadow: var(--shadow-out); padding: 5px; 
+            animation: logoHiley 4s ease-in-out infinite; /* Animation Applied */
         }
-        .splash-frame img { width: 100%; height: 100%; border-radius: 30px; object-fit: cover; }
-
-        /* --- TOOL INTRO SCREEN --- */
-        #tool-intro {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 6000; display: none; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center;
-        }
-        .loader-line { width: 200px; height: 6px; background: var(--bg); box-shadow: var(--shadow-in); border-radius: 10px; margin-top: 25px; overflow: hidden; }
-        .loader-fill { width: 0%; height: 100%; background: var(--red); border-radius: 10px; }
-        .active-load { animation: load 3s forwards; }
+        .splash-loader { width: 140px; height: 4px; background: var(--shadow-in); border-radius: 10px; margin-top: 25px; overflow: hidden; }
+        .loader-fill { width: 0%; height: 100%; background: var(--red); animation: load 2s forwards; }
 
         /* --- HEADER --- */
         header {
@@ -63,244 +60,231 @@
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
         }
-        .status-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 8px #00ff00; animation: blink 1.5s infinite; }
+        .net-status { font-family: 'Orbitron'; font-size: 0.55rem; display: flex; align-items: center; gap: 8px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #00ff00; animation: heartbeat 2s infinite; box-shadow: 0 0 10px #00ff00; }
 
-        /* --- CONTAINER --- */
+        /* --- NEWS BAR --- */
+        .news-bar { background: var(--shadow-in); height: 30px; overflow: hidden; display: flex; align-items: center; position: relative; }
+        .news-label { background: var(--red); color: white; font-family: 'Orbitron'; font-size: 0.5rem; padding: 0 10px; height: 100%; display: flex; align-items: center; z-index: 2; font-weight: 900; }
+        .news-text { white-space: nowrap; font-family: 'Orbitron'; font-size: 0.55rem; color: var(--red); animation: marquee 35s linear infinite; position: absolute; }
+
         .container { max-width: 500px; margin: 0 auto; padding: 20px 15px 120px; }
-        .section { display: none; animation: slideUp 0.6s ease; }
+        .section { display: none; animation: slideUp 0.5s ease forwards; }
         .section.active { display: block; }
 
-        /* --- CARDS --- */
-        .card { background: var(--bg); border-radius: 35px; padding: 25px; box-shadow: var(--shadow-out); margin-bottom: 25px; }
+        .card { background: var(--bg); border-radius: 30px; padding: 25px; box-shadow: var(--shadow-out); margin-bottom: 20px; text-align: center; }
+        
+        /* Logo in Cards */
+        .card-logo { 
+            width: 100px; height: 100px; border-radius: 30px; border: 2.5px solid var(--red); 
+            padding: 5px; box-shadow: var(--shadow-out); 
+            animation: logoHiley 5s ease-in-out infinite; /* Animation Applied */
+        }
 
-        /* --- TOOL GRID --- */
-        .grid-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .tool-card { background: var(--bg); padding: 20px; border-radius: 25px; box-shadow: var(--shadow-out); text-align: center; cursor: pointer; }
-        .tool-card i { font-size: 1.6rem; color: var(--red); margin-bottom: 10px; display: block; }
-        .tool-card span { font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; color: var(--text); }
+        /* --- TOOLS GRID --- */
+        .grid-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .tool-card { background: var(--bg); padding: 25px 15px; border-radius: 25px; box-shadow: var(--shadow-out); text-align: center; cursor: pointer; text-decoration: none; color: inherit; }
+        .tool-card i { font-size: 2.2rem; color: var(--red); margin-bottom: 12px; display: block; }
+        .tool-card img { width: 50px; height: 50px; border-radius: 12px; margin-bottom: 12px; object-fit: cover; border: 1.5px solid var(--red); padding: 2px; }
+        .tool-card span { font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; }
         .tool-card:active { box-shadow: var(--shadow-in); transform: scale(0.95); }
 
-        /* --- SEARCH BOX --- */
-        .search-container { margin: 20px 0; position: relative; }
-        .search-box { width: 100%; padding: 15px 20px 15px 50px; border-radius: 20px; border: none; background: var(--bg); box-shadow: var(--shadow-in); color: var(--text); outline: none; font-family: 'Poppins'; }
-        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--red); }
-
-        /* --- VIP STATS --- */
-        .skill-row { margin-bottom: 15px; }
-        .skill-label { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: bold; font-family: 'Orbitron'; margin-bottom: 5px; }
-        .skill-bar { width: 100%; height: 8px; background: var(--bg); box-shadow: var(--shadow-in); border-radius: 10px; overflow: hidden; }
-        .skill-fill { height: 100%; background: var(--red); width: 0; transition: 1.5s cubic-bezier(0.1, 1, 0.1, 1); }
-
-        /* --- CONTACT GRID --- */
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .contact-tile { background: var(--bg); padding: 20px; border-radius: 25px; box-shadow: var(--shadow-out); text-align: center; text-decoration: none; display: block; }
-        .contact-tile i { font-size: 1.8rem; color: var(--red); margin-bottom: 10px; }
-        .contact-tile p { font-size: 0.7rem; font-weight: bold; font-family: 'Orbitron'; color: var(--text); }
-
-        /* --- POLICY ITEMS cc b--- */
-        .policy-item { padding: 15px; border-radius: 20px; box-shadow: var(--shadow-in); margin-bottom: 15px; font-size: 0.75rem; line-height: 1.5; }
-        .policy-item h4 { font-family: 'Orbitron'; color: var(--red); font-size: 0.7rem; margin-bottom: 5px; }
-
-        /* --- MODAL --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal { background: var(--bg); padding: 30px; border-radius: 30px; box-shadow: var(--shadow-out); text-align: center; max-width: 350px; width: 100%; }
-
-        /* --- DOCK NAV --- */
-        .dock { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: var(--glass); backdrop-filter: blur(15px); padding: 10px; border-radius: 30px; box-shadow: var(--shadow-out); display: flex; justify-content: space-around; z-index: 2000; }
-        .dock i { font-size: 1.2rem; padding: 12px; cursor: pointer; color: #a1a1a1; }
-        .dock i.active { color: var(--red); transform: translateY(-8px); filter: drop-shadow(0 0 5px var(--red)); }
+        /* --- VIP ELEMENTS --- */
+        .skill-bar { height: 8px; background: var(--shadow-in); border-radius: 10px; margin: 10px 0 20px; overflow: hidden; }
+        .skill-fill { height: 100%; background: var(--red); width: 0; transition: 2s cubic-bezier(0.1, 1, 0.1, 1); }
+        .btn-back { width: 100%; padding: 15px; border-radius: 20px; border: none; background: var(--bg); box-shadow: var(--shadow-out); font-family: 'Orbitron'; font-size: 0.7rem; color: var(--red); cursor: pointer; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
         /* --- SIDEBAR --- */
         .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--bg); z-index: 4001; padding: 30px 20px; transition: 0.4s; }
         .sidebar.active { left: 0; }
+        .side-item { display: flex; align-items: center; padding: 15px; background: var(--bg); border-radius: 20px; box-shadow: var(--shadow-out); margin-bottom: 12px; cursor: pointer; color: var(--text); text-decoration: none; }
+        .side-item i { width: 35px; color: var(--red); }
+        .side-item span { font-family: 'Orbitron'; font-size: 0.65rem; font-weight: bold; }
+
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; }
         .overlay.active { display: block; }
 
-        footer { text-align: center; font-size: 0.6rem; font-family: 'Orbitron'; opacity: 0.4; padding: 20px; }
+        /* --- DOCK --- */
+        .dock { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 450px; background: var(--glass); backdrop-filter: blur(20px); padding: 12px; border-radius: 35px; box-shadow: var(--shadow-out); display: flex; justify-content: space-around; z-index: 2000; }
+        .dock i { font-size: 1.3rem; padding: 10px; cursor: pointer; color: #a1a1a1; }
+        .dock i.active { color: var(--red); transform: translateY(-8px); filter: drop-shadow(0 0 5px var(--red)); }
+
+        /* --- MODAL --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal { background: var(--bg); padding: 30px; border-radius: 35px; box-shadow: var(--shadow-out); text-align: center; width: 100%; max-width: 360px; border: 1px solid var(--red); }
+        .btn-boot { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 18px; font-family: 'Orbitron'; font-size: 0.8rem; cursor: pointer; margin-top: 15px; }
+
+        footer { text-align: center; font-size: 0.6rem; font-family: 'Orbitron'; opacity: 0.5; padding: 20px; }
     </style>
 </head>
 <body>
 
-    <!-- Main Splash -->
+    <!-- Splash Screen (Fast 2s) -->
     <div id="splash">
-        <div class="splash-frame"><img src="https://i.postimg.cc/1V8dtc0y/20260129-160300.jpg"></div>
-        <h2 style="font-family:'Orbitron'; color:var(--red); margin-top:20px; letter-spacing:3px;">MA LEGEND</h2>
-        <div class="loader-line" style="width:140px;"><div class="loader-fill" style="animation: load 3s forwards;"></div></div>
-    </div>
-
-    <!-- Tool Intro Screen (3s) -->
-    <div id="tool-intro">
-        <i class="fas fa-bolt" style="font-size: 3.5rem; color: var(--red); animation: float 2s infinite;"></i>
-        <h2 id="intro-name" style="font-family:'Orbitron'; color:var(--text); margin-top:25px; font-size: 0.9rem;">LOADING...</h2>
-        <div class="loader-line"><div class="loader-fill" id="intro-fill"></div></div>
+        <img src="https://i.postimg.cc/1V8dtc0y/20260129-160300.jpg" class="splash-logo">
+        <h2 style="font-family:'Orbitron'; color:var(--red); margin-top:20px; letter-spacing:4px;">MA LEGEND</h2>
+        <div class="splash-loader"><div class="loader-fill"></div></div>
     </div>
 
     <header>
-        <i class="fas fa-bars" onclick="toggleSidebar()" style="color:var(--red); cursor:pointer;"></i>
-        <div style="font-family:'Orbitron'; font-size:0.7rem;">
-            <span class="status-dot"></span>SYSTEM ONLINE
-        </div>
-        <i class="fas fa-moon" onclick="toggleDarkMode()" style="color:var(--red); cursor:pointer;"></i>
+        <i class="fas fa-bars-staggered" onclick="toggleSidebar()" style="color:var(--red); cursor:pointer;"></i>
+        <div class="net-status"><div class="dot" id="net-dot"></div> <span id="greet">SYNCING...</span></div>
+        <i class="fas fa-power-off" onclick="toggleDarkMode()" style="color:var(--red); cursor:pointer;"></i>
     </header>
 
+    <div class="news-bar">
+        <div class="news-label">LIVE</div>
+        <div class="news-text">MA LEGEND HUB V4 | LATEST UPDATES: WHATSAPP MSG BYPASS v2.0 READY | SECURE CODE PRO ONLINE | VISIT LEGEND STORE FOR PREMIUM TOOLS | JOIN OUR TELEGRAM FOR BYPASS RELEASES!</div>
+    </div>
+
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+    
     <div class="sidebar" id="sidebar">
-        <div style="text-align:right;"><i class="fas fa-times" onclick="toggleSidebar()" style="color:var(--red);"></i></div>
-        <h2 style="font-family:'Orbitron'; font-size:1rem; color:var(--red); margin: 20px 0;">MA HUB MENU</h2>
-        <div class="card" onclick="showSection('home')" style="padding:15px; margin-bottom:10px; cursor:pointer;">DASHBOARD</div>
-        <div class="card" onclick="showSection('about')" style="padding:15px; margin-bottom:10px; cursor:pointer;">VIP PROFILE</div>
+        <h3 style="font-family:'Orbitron'; text-align:center; color:var(--red); margin-bottom:30px; font-size:0.8rem;">MA PANEL</h3>
+        <div class="side-item" onclick="showSection('home')"><i class="fas fa-house"></i><span>DASHBOARD</span></div>
+        <div class="side-item" onclick="showSection('about')"><i class="fas fa-id-card"></i><span>VIP PROFILE</span></div>
+        <div class="side-item" onclick="showSection('contact')"><i class="fas fa-paper-plane"></i><span>CONNECT</span></div>
+        <div class="side-item" onclick="showSection('policy')"><i class="fas fa-shield-halved"></i><span>POLICY</span></div>
+        <div style="margin: 20px 0; border-top: 1px solid rgba(0,0,0,0.1);"></div>
+        <a href="https://legend-mods-store.vercel.app/" class="side-item"><i class="fas fa-shop"></i><span>STORE</span></a>
+        <a href="https://t.me/legend_tool" class="side-item"><i class="fab fa-telegram-plane"></i><span>TELEGRAM</span></a>
     </div>
 
     <div class="container">
         
-        <!-- DASHBOARD (HOME) -->
+        <!-- DASHBOARD -->
         <div id="home" class="section active">
-            <div class="card" style="text-align:center;">
-                <img src="https://i.postimg.cc/1V8dtc0y/20260129-160300.jpg" style="width:90px; height:90px; border-radius:50%; border:2px solid var(--red); padding:4px; box-shadow:var(--shadow-out);">
-                <h3 id="typing-text" style="font-family:'Orbitron'; font-size:0.85rem; margin-top:15px; color:var(--red); min-height:1.2rem;"></h3>
-                <p style="font-size:0.6rem; opacity:0.6; font-weight:bold;">SUPREME MASTER V25</p>
+            <div class="card">
+                <img src="https://i.postimg.cc/1V8dtc0y/20260129-160300.jpg" class="card-logo">
+                <h3 id="typing-text" style="font-family:'Orbitron'; font-size:0.85rem; margin-top:20px; color:var(--red); min-height:1.2rem; font-weight: 900;"></h3>
+                <p style="font-size:0.55rem; font-family:'Orbitron'; opacity:0.6; margin-top:5px; letter-spacing: 2px;">SUPREME MASTER DEVELOPER</p>
             </div>
 
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" id="toolSearch" class="search-box" placeholder="Search Tools..." onkeyup="searchTools()">
-            </div>
-
-            <div class="grid-tools" id="toolsGrid">
-                <!-- Template example with link -->
-                <div class="tool-card" onclick="startTool('Msg Engine', 'Military grade message encryption.', 'https://google.com')"><i class="fas fa-paper-plane"></i><span>Msg Engine</span></div>
-                <div class="tool-card" onclick="startTool('Legend Gen', 'Supreme payload generator.', 'https://youtube.com')"><i class="fas fa-crown"></i><span>Legend Gen</span></div>
-                <div class="tool-card" onclick="startTool('Hacker Lab', 'Virtual exploit environment.', '#')"><i class="fas fa-terminal"></i><span>Hacker Lab</span></div>
-                <div class="tool-card" onclick="startTool('Spam Pro', 'Spam bot protection.', '#')"><i class="fas fa-bomb"></i><span>Spam Pro</span></div>
+            <div class="grid-tools">
+                <div class="tool-card" onclick="startTool('WhatsApp Msg', 'Professional messaging bypass system.', 'https://whatsapp-messages-peach.vercel.app/')">
+                    <i class="fab fa-whatsapp"></i><span>WHATSAPP MSG</span>
+                </div>
+                <div class="tool-card" onclick="startTool('Secure Code', 'Encrypted protocol generator.', 'https://legend-code-secure.vercel.app/')">
+                    <i class="fas fa-shield-halved"></i><span>SECURE CODE</span>
+                </div>
             </div>
         </div>
 
-        <!-- VIP PROFILE (ABOUT) -->
+        <!-- ABOUT -->
         <div id="about" class="section">
-            <div class="card">
-                <h3 style="font-family:'Orbitron'; font-size:0.8rem; color:var(--red); margin-bottom:20px; text-align:center;">VIP MODDER STATS</h3>
-                <div class="skill-row">
-                    <div class="skill-label"><span>PYTHON</span><span>98%</span></div>
+            <div class="card" style="border: 1px solid var(--red);">
+                <img src="https://i.postimg.cc/1V8dtc0y/20260129-160300.jpg" class="card-logo" style="border-radius: 50%;">
+                <h2 style="font-family:'Orbitron'; font-size:1.1rem; margin-top:15px;">MA LEGEND</h2>
+                <div style="font-family:'Orbitron'; font-size:0.5rem; background:var(--red); color:white; padding:4px 12px; border-radius:10px; display:inline-block; margin-top:5px;">VERIFIED MODDER</div>
+                
+                <div style="margin-top:20px; text-align:left;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.6rem; font-family:'Orbitron';"><span>SYSTEM BYPASS</span><span>98%</span></div>
                     <div class="skill-bar"><div class="skill-fill" data-width="98%"></div></div>
-                </div>
-                <div class="skill-row">
-                    <div class="skill-label"><span>BYPASS</span><span>95%</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.6rem; font-family:'Orbitron';"><span>CODING PRO</span><span>95%</span></div>
                     <div class="skill-bar"><div class="skill-fill" data-width="95%"></div></div>
                 </div>
             </div>
+            <button class="btn-back" onclick="showSection('home')"><i class="fas fa-house"></i> BACK TO DASHBOARD</button>
         </div>
 
         <!-- CONTACT -->
         <div id="contact" class="section">
-            <div class="contact-grid">
-                <a href="https://t.me/LegendMode_banchack_whatsapp" class="contact-tile"><i class="fab fa-telegram-plane"></i><p>TELEGRAM</p></a>
-                <a href="https://whatsapp.com/channel/0029VarS46O3QxRtTZO0z60x" class="contact-tile"><i class="fab fa-whatsapp"></i><p>WHATSAPP</p></a>
+            <h3 style="font-family:'Orbitron'; font-size:0.8rem; color:var(--red); text-align:center; margin-bottom:20px;">VIP CHANNELS</h3>
+            <div class="grid-tools" style="grid-template-columns: 1fr;">
+                <a href="https://t.me/legend_tool" class="tool-card"><i class="fab fa-telegram"></i><span>TELEGRAM CHANNEL</span></a>
+                <a href="https://whatsapp.com/channel/0029VarS46O3QxRtTZO0z60x" class="tool-card"><i class="fab fa-whatsapp"></i><span>WHATSAPP CHANNEL</span></a>
+                <a href="https://www.youtube.com/@legendmod407" class="tool-card"><i class="fab fa-youtube"></i><span>YOUTUBE TUTORIALS</span></a>
             </div>
+            <button class="btn-back" onclick="showSection('home')"><i class="fas fa-house"></i> BACK TO DASHBOARD</button>
         </div>
 
         <!-- POLICY -->
         <div id="policy" class="section">
             <div class="card">
-                <div class="policy-item"><h4>SAFETY</h4><p>Local encryption active. No data stored.</p></div>
+                <h3 style="font-family:'Orbitron'; font-size:0.8rem; color:var(--red); margin-bottom:15px; text-align:center;">SECURITY POLICY</h3>
+                <p style="font-size:0.65rem; line-height:1.7; opacity:0.8;">MA Legend Hub uses local device encryption. We don't track personal data or tool history. Stay anonymous and use tools responsibly.</p>
             </div>
+            <button class="btn-back" onclick="showSection('home')"><i class="fas fa-house"></i> BACK TO DASHBOARD</button>
         </div>
 
-        <footer>© 2026 MA LEGEND | SUPREME HUB</footer>
+        <footer>© 2026 MA LEGEND | SUPREME MASTER HUB</footer>
     </div>
 
     <!-- MODAL -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal">
-            <h3 id="modal-title" style="font-family:'Orbitron'; color:var(--red); margin-bottom:15px;"></h3>
-            <p id="modal-desc" style="font-size:0.8rem; margin-bottom:25px; line-height:1.6;"></p>
-            <button id="launch-btn" style="padding:12px 30px; border-radius:15px; border:none; background:var(--red); color:white; font-family:'Orbitron'; font-size:0.7rem; cursor:pointer;" onclick="launchNow()">LAUNCH SYSTEM</button>
+            <i class="fas fa-bolt-lightning" style="font-size:3rem; color:var(--red); margin-bottom:20px;"></i>
+            <h3 id="modal-title" style="font-family:'Orbitron'; color:var(--red);"></h3>
+            <p id="modal-desc" style="font-size:0.75rem; margin-top:10px; opacity:0.8;"></p>
+            <button class="btn-boot" onclick="launchNow()">BOOT SYSTEM</button>
+            <p onclick="closeModal()" style="font-size:0.6rem; margin-top:20px; cursor:pointer; opacity:0.5; font-family:'Orbitron';">ABORT</p>
         </div>
     </div>
 
-    <!-- DOCK -->
+    <!-- DOCK NAV -->
     <div class="dock">
-        <i class="fas fa-th-large active" id="dock-home" onclick="showSection('home')"></i>
+        <i class="fas fa-house active" id="dock-home" onclick="showSection('home')"></i>
         <i class="fas fa-user-shield" id="dock-about" onclick="showSection('about')"></i>
         <i class="fas fa-paper-plane" id="dock-contact" onclick="showSection('contact')"></i>
-        <i class="fas fa-shield-alt" id="dock-policy" onclick="showSection('policy')"></i>
+        <i class="fas fa-shield-halved" id="dock-policy" onclick="showSection('policy')"></i>
     </div>
 
     <script>
-        let currentToolLink = ""; // Link store karne ke liye
+        let currentToolLink = "";
+
+        function updateHub() {
+            const hour = new Date().getHours();
+            const dot = document.getElementById('net-dot');
+            const greet = document.getElementById('greet');
+            greet.innerText = hour < 12 ? "GOOD MORNING" : hour < 18 ? "GOOD AFTERNOON" : "GOOD EVENING";
+            dot.style.background = navigator.onLine ? "#00ff00" : "#ff0000";
+        }
+        setInterval(updateHub, 1000);
 
         window.onload = () => {
             setTimeout(() => {
-                document.getElementById('splash').style.opacity = '0';
-                setTimeout(() => { document.getElementById('splash').style.display = 'none'; startTyping(); }, 500);
-            }, 3000);
+                const splash = document.getElementById('splash');
+                splash.style.transition = '0.5s';
+                splash.style.opacity = '0';
+                setTimeout(() => { 
+                    splash.style.display = 'none'; 
+                    startTyping(); 
+                    updateHub();
+                }, 500);
+            }, 2000); 
         };
 
         function startTyping() {
-            const text = "WELCOME, TO LEGEND MODS"; let i = 0; const target = document.getElementById('typing-text');
-            function type() { if (i < text.length) { target.innerHTML += text.charAt(i); i++; setTimeout(type, 120); } } type();
+            const text = "MA LEGEND HUB ONLINE"; let i = 0; const target = document.getElementById('typing-text');
+            target.innerHTML = "";
+            function type() { if (i < text.length) { target.innerHTML += text.charAt(i); i++; setTimeout(type, 100); } } type();
         }
-
-        function startTool(title, desc, link) {
-            currentToolLink = link; // Link save karo
-            const intro = document.getElementById('tool-intro');
-            const fill = document.getElementById('intro-fill');
-            const name = document.getElementById('intro-name');
-
-            name.innerText = "INITIALIZING " + title.toUpperCase();
-            intro.style.display = 'flex';
-            fill.classList.add('active-load');
-
-            setTimeout(() => {
-                intro.style.display = 'none';
-                fill.classList.remove('active-load');
-                openModal(title, desc);
-            }, 3000);
-        }
-
-        function openModal(title, desc) {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-desc').innerText = desc;
-            document.getElementById('modal-overlay').style.display = 'flex';
-        }
-
-        function launchNow() {
-            if(currentToolLink !== "#") {
-                window.location.href = currentToolLink; // Link khol do
-            } else {
-                alert("Link not available yet!");
-            }
-            closeModal();
-        }
-
-        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
         function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.dock i').forEach(i => i.classList.remove('active'));
-            document.getElementById('dock-' + id).classList.add('active');
-            if(id === 'about') {
-                setTimeout(() => { document.querySelectorAll('.skill-fill').forEach(f => f.style.width = f.getAttribute('data-width')); }, 300);
-            }
-            toggleSidebar(true); window.scrollTo(0, 0);
+            if(document.getElementById('dock-' + id)) document.getElementById('dock-' + id).classList.add('active');
+            toggleSidebar(true);
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
+        function startTool(title, desc, link) {
+            currentToolLink = link;
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+
+        function launchNow() { if(currentToolLink !== "#") window.location.href = currentToolLink; closeModal(); }
+        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+        
         function toggleSidebar(forceClose) {
             const side = document.getElementById('sidebar');
             const over = document.getElementById('overlay');
             if(forceClose) { side.classList.remove('active'); over.classList.remove('active'); }
             else { side.classList.toggle('active'); over.classList.toggle('active'); }
         }
-
-        function searchTools() {
-            let input = document.getElementById('toolSearch').value.toLowerCase();
-            let cards = document.getElementsByClassName('tool-card');
-            for (let i = 0; i < cards.length; i++) {
-                let title = cards[i].getElementsByTagName('span')[0].innerText.toLowerCase();
-                cards[i].style.display = title.includes(input) ? "block" : "none";
-            }
-        }
-
         function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
     </script>
 </body>
